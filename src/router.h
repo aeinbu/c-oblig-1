@@ -9,6 +9,10 @@ typedef struct {
 	unsigned char routes[10];
 } router;
 
-router *loadRouters();
+void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters);
+
+void saveRouters(router *routers, int numberOfRouters);
+
+void freeRouters(router *routers, int numberOfRouters);
 
 #endif

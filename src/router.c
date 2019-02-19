@@ -1,31 +1,28 @@
-#include <stdlib.h>
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "router.h"
 
-router *loadRouters() {
-	FILE *file = fopen("./data/5_routers_fully_connected", "r");
-	if(file == 0) {
-		// fopen failed
-		return NULL;
-	}
+void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters) {
+	assert(outRouters);
+	assert(outNumberOfRouters);
 
+	FILE *file = fopen(filename, "r");
+	assert(file);
+	
 	int numberOfRouters;
 	int intReadCount = fread(&numberOfRouters, sizeof(int), 1, file);
-	if(intReadCount < 1) {
-		// fread failed
-		return NULL;
-	}
+	assert(intReadCount);
 	if(numberOfRouters == 0) {
 		// no routers
-		return NULL;
+		*outRouters = NULL;
+		*outNumberOfRouters = 0;
+		return;
 	}
 
 	router *routers = calloc(numberOfRouters, sizeof(router));
-	if(routers == NULL) {
-		// malloc/calloc failed
-		return NULL;
-	}
+	assert(routers);
 
 	// read routers
 	for(int i = 0; i < numberOfRouters; i++)
@@ -40,8 +37,6 @@ router *loadRouters() {
 		fgets(routers[i].model, lengthOfName, file);
 
 		routers[i].numberOfRoutes = 0;
-
-		printf("Id: %2hhx, Flags: %2hhx, Name: %s\n", routers[i].id, routers[i].flags, routers[i].model);
 	}
 
 	fgetc(file);	// read past newline
@@ -58,10 +53,24 @@ router *loadRouters() {
 		fgetc(file);	//read past newline
 	}
 
-//TODO: return number of routers that are read from the file, so that the size of the routers array is known
-//TODO: remember to free all model names (strings) when routers is free'd
-
 	fclose(file);
 
-	return routers;
+	*outRouters = routers;
+	*outNumberOfRouters = numberOfRouters;
+	return;
+}
+
+
+void saveRouters(router *routers, int numberOfRouters) {
+	//TODO:
+}
+
+
+void freeRouters(router *routers, int numberOfRouters) {
+	for(int i = 0; i < numberOfRouters; i++) {
+		free(routers[i].model);
+		routers[i].model = NULL;
+	};
+
+	free(routers);
 }
