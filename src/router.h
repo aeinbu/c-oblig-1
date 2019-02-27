@@ -2,17 +2,27 @@
 #define _ROUTER_H
 
 typedef struct {
+	unsigned char active : 1;
+	unsigned char wireless : 1;
+	unsigned char _5GHz : 1;
+	unsigned char : 1;
+	unsigned char changeNumber : 4;
+} flags;
+
+typedef struct router {
 	unsigned char id;
-	unsigned char flags;
+	flags flags;
 	char *model;
-	int numberOfRoutes;
-	unsigned char routes[10];
+	int numberOfConnections;
+	struct router *connections[10];
 } router;
 
-void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters);
+void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRouters);
 
-void saveRouters(router *routers, int numberOfRouters);
+void saveRouters(const router *routers, const int numberOfRouters);
 
-void freeRouters(router *routers, int numberOfRouters);
+void freeRouters(router *routers, const int numberOfRouters);
+
+router *findRouterById(const unsigned char routerId, router *routers, const int numberOfRouters);
 
 #endif

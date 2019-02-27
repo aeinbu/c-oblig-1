@@ -5,12 +5,14 @@
 #include "router.h"
 #include "commandProcessor.h"
 
+
+
 int main(int argc, char *argv[]) {
 	// //TODO:
 	// assert(argc == 3);
 	// char *routersFilename = argv[1];
 	// char *commandsFilename = argv[2];
-	char *routersFilename = "./data/5_routers_fully_connected";
+	char *routersFilename = "./data/10_routers_10_edges";
 	char *commandsFilename = "./data/kommandoer_10_routers.txt";
 
 	router *routers;
@@ -18,9 +20,9 @@ int main(int argc, char *argv[]) {
 	loadRouters(routersFilename, &routers, &numberOfRouters);
 
 	printf("Succesfully loaded information about %d routers.\n", numberOfRouters);
-	// for(int i = 0; i < numberOfRouters; i++) {
-	// 	printf("Id: %2hhx, Flags: %2hhx, Name: %s\n", routers[i].id, routers[i].flags, routers[i].model);
-	// }
+	for(int i = 0; i < numberOfRouters; i++) {
+		printf("Id: %2hhx, Active: %d, Wireless: %d, 5GHz: %d, Change number: %2d, Name: %s\n", routers[i].id, routers[i].flags.active, routers[i].flags.wireless, routers[i].flags._5GHz, routers[i].flags.changeNumber, routers[i].model);
+	}
 
 
 

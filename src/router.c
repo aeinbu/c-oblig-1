@@ -1,10 +1,11 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "router.h"
 
-void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters) {
+void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRouters) {
 	assert(outRouters);
 	assert(outNumberOfRouters);
 
@@ -27,30 +28,36 @@ void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters)
 	// read routers
 	for(int i = 0; i < numberOfRouters; i++)
 	{
-		fgetc(file);	// read past newline
+		fseek(file, sizeof(char), SEEK_CUR); // read past newline
 		fread(&(routers[i]), sizeof(unsigned char), 2, file);
 
 		unsigned char lengthOfName;
 		fread(&lengthOfName, sizeof(unsigned char), 1, file);
 		
-		routers[i].model = malloc(lengthOfName);
+		routers[i].model = calloc(lengthOfName, sizeof(char));
 		fgets(routers[i].model, lengthOfName, file);
 
-		routers[i].numberOfRoutes = 0;
+		routers[i].numberOfConnections = 0;
 	}
 
-	fgetc(file);	// read past newline
+	fseek(file, sizeof(char), SEEK_CUR); // read past newline
 
 	// read routes
-	while(!feof(file)) {
-		unsigned char from;
-		fread(&from, sizeof(unsigned char), 1, file);
-		unsigned char to;
-		fread(&to, sizeof(unsigned char), 1, file);
+	while(true) {
+		unsigned char fromId;
+		if(fread(&fromId, sizeof(unsigned char), 1, file)){
+			break;
+		};
+		unsigned char toId;
+		fread(&toId, sizeof(unsigned char), 1, file);
 
-		routers[from].routes[routers[from].numberOfRoutes++] = to;
+		router *fromRouter = findRouterById(fromId, routers, numberOfRouters);
+		assert(fromRouter);
+		router *toRouter = findRouterById(toId, routers, numberOfRouters);
+		assert(toRouter);
+		fromRouter->connections[fromRouter->numberOfConnections++] = toRouter;
 
-		fgetc(file);	//read past newline
+		fseek(file, sizeof(char), SEEK_CUR); // read past newline
 	}
 
 	fclose(file);
@@ -61,16 +68,26 @@ void loadRouters(char filename[], router *outRouters[], int *outNumberOfRouters)
 }
 
 
-void saveRouters(router *routers, int numberOfRouters) {
+void saveRouters(const router *routers, const int numberOfRouters) {
 	//TODO:
 }
 
 
-void freeRouters(router *routers, int numberOfRouters) {
+void freeRouters(router *routers, const int numberOfRouters) {
 	for(int i = 0; i < numberOfRouters; i++) {
 		free(routers[i].model);
 		routers[i].model = NULL;
 	};
 
 	free(routers);
+}
+
+router *findRouterById(const unsigned char routerId, router *routers, const int numberOfRouters) {
+	for(int i = 0; i < numberOfRouters; i++) {
+		if(routers[i].id == routerId) {
+			return &routers[i];
+		}
+	}
+
+	return NULL;
 }
