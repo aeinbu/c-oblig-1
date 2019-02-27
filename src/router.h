@@ -1,6 +1,8 @@
 #ifndef _ROUTER_H
 #define _ROUTER_H
 
+#define MAX_NUMBER_OF_CONNECTIONS 10
+
 typedef struct {
 	unsigned char active : 1;
 	unsigned char wireless : 1;
@@ -14,7 +16,7 @@ typedef struct router {
 	flags flags;
 	char *model;
 	int numberOfConnections;
-	struct router *connections[10];
+	struct router *connections[MAX_NUMBER_OF_CONNECTIONS];
 } router;
 
 void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRouters);

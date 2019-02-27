@@ -53,6 +53,7 @@ void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRo
 
 		router *fromRouter = findRouterById(fromId, routers, numberOfRouters);
 		assert(fromRouter);
+		assert(fromRouter->numberOfConnections < MAX_NUMBER_OF_CONNECTIONS - 1);
 		router *toRouter = findRouterById(toId, routers, numberOfRouters);
 		assert(toRouter);
 		fromRouter->connections[fromRouter->numberOfConnections++] = toRouter;
