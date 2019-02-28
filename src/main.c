@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 	FILE *file = fopen(commandsFilename, "r");
 	assert(file);
 
-	executeCommands(file, stdout);
+	executeCommands(file, stdout, routers, &numberOfRouters);
 
 	fclose(file);
 
