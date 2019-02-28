@@ -23,7 +23,7 @@ void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRo
 
 void saveRouters(const router *routers, const int numberOfRouters);
 
-void freeRouters(router *routers, const int numberOfRouters);
+void freeRouters(router *routers[], int *numberOfRouters);
 
 router *findRouterById(const unsigned char routerId, router *routers, const int numberOfRouters);
 

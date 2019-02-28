@@ -74,14 +74,16 @@ void saveRouters(const router *routers, const int numberOfRouters) {
 }
 
 
-void freeRouters(router *routers, const int numberOfRouters) {
-	for(int i = 0; i < numberOfRouters; i++) {
-		free(routers[i].model);
-		routers[i].model = NULL;
-	};
+void freeRouters(router *routers[], int *numberOfRouters) {
+	for(int i = 0; i < *numberOfRouters; i++) {
+		free((*routers)[i].model);
+	}
 
-	free(routers);
+	free(*routers);
+	*routers = NULL;
+	*numberOfRouters = 0;
 }
+
 
 router *findRouterById(const unsigned char routerId, router *routers, const int numberOfRouters) {
 	for(int i = 0; i < numberOfRouters; i++) {

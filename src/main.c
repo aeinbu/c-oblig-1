@@ -33,5 +33,5 @@ int main(int argc, char *argv[]) {
 	fclose(file);
 
 	saveRouters(routers, numberOfRouters);
-	freeRouters(routers, numberOfRouters);
+	freeRouters(&routers, &numberOfRouters);
 }
