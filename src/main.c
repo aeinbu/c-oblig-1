@@ -8,12 +8,11 @@
 
 
 int main(int argc, char *argv[]) {
-	// //TODO:
-	// assert(argc == 3);
-	// char *routersFilename = argv[1];
-	// char *commandsFilename = argv[2];
-	char *routersFilename = "./data/10_routers_10_edges";
-	char *commandsFilename = "./data/kommandoer_10_routers.txt";
+	assert(argc == 3);
+	char *routersFilename = argv[1];
+	char *commandsFilename = argv[2];
+	// char *routersFilename = "./data/10_routers_10_edges";
+	// char *commandsFilename = "./data/kommandoer_10_routers.txt";
 
 	router *routers;
 	int numberOfRouters;
