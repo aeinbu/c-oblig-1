@@ -5,32 +5,30 @@
 #include "router.h"
 #include "commandProcessor.h"
 
-
-
 int main(int argc, char *argv[]) {
-	assert(argc == 3);
+	assert(argc >= 2);
 	char *routersFilename = argv[1];
-	char *commandsFilename = argv[2];
-	// char *routersFilename = "./data/10_routers_10_edges";
-	// char *commandsFilename = "./data/kommandoer_10_routers.txt";
+	char *commandsFilename = argc == 3 ? argv[2] : NULL;
 
 	router *routers;
-	int numberOfRouters;
+	size_t numberOfRouters;
 	loadRouters(routersFilename, &routers, &numberOfRouters);
 
-	printf("Succesfully loaded information about %d routers.\n", numberOfRouters);
-	for(int i = 0; i < numberOfRouters; i++) {
+	printf("Succesfully loaded information about %zu routers.\n", numberOfRouters);
+	for(size_t i = 0; i < numberOfRouters; i++) {
 		printf("Id: %2hhx, Active: %d, Wireless: %d, 5GHz: %d, Change number: %2d, Name: %s\n", routers[i].id, routers[i].flags.active, routers[i].flags.wireless, routers[i].flags._5GHz, routers[i].flags.changeNumber, routers[i].model);
 	}
 
 
 
-	FILE *file = fopen(commandsFilename, "r");
-	assert(file);
+	FILE *commandStream = commandsFilename != NULL ? fopen(commandsFilename, "r") : stdin;
+	assert(commandStream);
 
-	executeCommands(file, stdout, routers, &numberOfRouters);
+	executeCommands(commandStream, stdout, routers, &numberOfRouters);
 
-	fclose(file);
+	if(commandStream != stdin) {
+		fclose(commandStream);
+	}
 
 	saveRouters(routers, numberOfRouters);
 	freeRouters(&routers, &numberOfRouters);

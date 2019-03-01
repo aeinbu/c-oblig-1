@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef _ROUTER_H
 #define _ROUTER_H
 
@@ -19,12 +21,22 @@ typedef struct router {
 	struct router *connections[MAX_NUMBER_OF_CONNECTIONS];
 } router;
 
-void loadRouters(const char filename[], router *outRouters[], int *outNumberOfRouters);
+void loadRouters(const char filename[], router *outRouters[], size_t *outNumberOfRouters);
 
-void saveRouters(const router *routers, const int numberOfRouters);
+void saveRouters(const router routers[], const size_t numberOfRouters);
 
-void freeRouters(router *routers[], int *numberOfRouters);
+void freeRouters(router *routers[], size_t *numberOfRouters);
 
-router *findRouterById(const unsigned char routerId, router *routers, const int numberOfRouters);
+router *findRouterById(const unsigned char routerId, router routers[], const size_t numberOfRouters);
+
+bool setFlagOnRouter(router *router, unsigned char flagNumber, unsigned char value);
+
+bool setModelOnRouter(router *router, char model[]);
+
+bool addRouteOnRouter(router *fromRouter, router *toRouter);
+
+bool deleteRouter(router *routerToDelete, router routers[], size_t *numberOfRouters);
+
+bool findRouteBetweenRouters(router *fromRouter, router *toRouter, router *outRoutersFound[], size_t *outNumberOfFoundRouters);
 
 #endif
