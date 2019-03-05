@@ -37,6 +37,6 @@ bool addRouteOnRouter(router *fromRouter, router *toRouter);
 
 bool deleteRouter(router *routerToDelete, router routers[], size_t *numberOfRouters);
 
-bool findRouteBetweenRouters(router *fromRouter, router *toRouter, router *outRoutersFound[], size_t *outNumberOfFoundRouters);
+bool findRouteBetweenRouters(router *fromRouter, router *toRouter, size_t numberOfRouters/*, router *outRoutersFound[], size_t *outNumberOfFoundRouters*/);
 
 #endif

@@ -15,9 +15,9 @@ int main(int argc, char *argv[]) {
 	loadRouters(routersFilename, &routers, &numberOfRouters);
 
 	printf("Succesfully loaded information about %zu routers.\n", numberOfRouters);
-	for(size_t i = 0; i < numberOfRouters; i++) {
-		printf("Id: %2hhx, Active: %d, Wireless: %d, 5GHz: %d, Change number: %2d, Name: %s\n", routers[i].id, routers[i].flags.active, routers[i].flags.wireless, routers[i].flags._5GHz, routers[i].flags.changeNumber, routers[i].model);
-	}
+	// for(size_t i = 0; i < numberOfRouters; i++) {
+	// 	printf("Id: %2hhx, Active: %d, Wireless: %d, 5GHz: %d, Change number: %2d, Name: %s\n", routers[i].id, routers[i].flags.active, routers[i].flags.wireless, routers[i].flags._5GHz, routers[i].flags.changeNumber, routers[i].model);
+	// }
 
 
 

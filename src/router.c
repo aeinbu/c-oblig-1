@@ -45,7 +45,7 @@ void loadRouters(const char filename[], router *outRouters[], size_t *outNumberO
 	// read routes
 	while(true) {
 		unsigned char fromId;
-		if(fread(&fromId, sizeof(unsigned char), 1, file)){
+		if(fread(&fromId, sizeof(unsigned char), 1, file) == 0){
 			break;
 		};
 		unsigned char toId;
@@ -184,15 +184,55 @@ bool deleteRouter(router *routerToDelete, router routers[], size_t *numberOfRout
 }
 
 
-bool findRouteBetweenRouters(router *fromRouter, router *toRouter, router *outRoutersFound[], size_t *outNumberOfFoundRouters) {
+bool _isInVisitedList(router *currentRouter, router **visitedRouters[], size_t *numberOfVisitedRouters) {
+	for(size_t i = 0; i < *numberOfVisitedRouters; i++)
+	{
+		if(currentRouter == (*visitedRouters)[i]) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+bool _findRouteBetweenRouters(router *fromRouter, router *toRouter, router **visitedRouters[], size_t *numberOfVisitedRouters) {
+	for(size_t i = 0; i < fromRouter->numberOfConnections; i++)
+	{
+		router *currentRouter = fromRouter->connections[i];
+		if(_isInVisitedList(currentRouter, visitedRouters, numberOfVisitedRouters)) {
+			continue;
+		}
+
+		// TODO: add fromRouter to the visitedRouters-list
+		(*visitedRouters)[(*numberOfVisitedRouters)++] = currentRouter;
+
+		if(currentRouter == toRouter) {
+			return true;
+		}
+
+		bool res = _findRouteBetweenRouters(currentRouter, toRouter, visitedRouters, numberOfVisitedRouters);
+		if(res == true) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+bool findRouteBetweenRouters(router *fromRouter, router *toRouter, size_t numberOfRouters/*, router *outRoutersFound[], size_t *outNumberOfFoundRouters*/) {
 	assert(fromRouter);
 	assert(toRouter);
-	assert(outRoutersFound);
-	assert(outNumberOfFoundRouters);
+	assert(numberOfRouters);	// can't be 0 if fromRouter or toRouter aren't NULL
+	// assert(outRoutersFound);
+	// assert(outNumberOfFoundRouters);
 
+	router **visitedRouters = calloc(numberOfRouters, sizeof(router *));
+	size_t numberOfVisitedRouters = 0;
+	
+	return _findRouteBetweenRouters(fromRouter, toRouter, &visitedRouters, &numberOfVisitedRouters);
 	//TODO: find route and return result as list of routers in outRouters and outNumberOfRouters
-	//TODO: also return true when a connection was found, false when none
-	return false;	//TODO:
 }
 
 

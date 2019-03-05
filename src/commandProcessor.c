@@ -139,9 +139,9 @@ void _executeQueryConnectionExists(FILE *outStream, char rest[], router routers[
     assert(fromRouter);
     router *toRouter = findRouterById(toRouterId, routers, *numberOfRouters);
     assert(toRouter);
-    router *routersFound;
-    size_t numberOfRoutersFound;
-    if(findRouteBetweenRouters(fromRouter, toRouter, &routersFound, &numberOfRoutersFound))
+    // router *routersFound;
+    // size_t numberOfRoutersFound;
+    if(findRouteBetweenRouters(fromRouter, toRouter, *numberOfRouters /*, &routersFound, &numberOfRoutersFound*/))
     {
         fprintf(outStream, "SUCCESS: ");
     } else {
